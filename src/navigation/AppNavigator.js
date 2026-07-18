@@ -2,12 +2,13 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { ActivityIndicator, View } from 'react-native';
+import { ActivityIndicator, View, TouchableOpacity, Text } from 'react-native';
 
 import { useAuth } from '../context/AuthContext';
 
 import LoginScreen from '../screens/auth/LoginScreen';
 import RegisterScreen from '../screens/auth/RegisterScreen';
+import SwitchAccountScreen from '../screens/auth/SwitchAccountScreen';
 import PassengerHomeScreen from '../screens/passenger/HomeScreen';
 import DriverHomeScreen from '../screens/driver/HomeScreen';
 
@@ -24,12 +25,22 @@ const AuthStack = () => (
 const PassengerTabs = () => (
   <Tab.Navigator screenOptions={{ headerShown: false }}>
     <Tab.Screen name="Inicio" component={PassengerHomeScreen} />
+    <Tab.Screen
+      name="Cambiar"
+      component={SwitchAccountScreen}
+      options={{ tabBarLabel: '🔄 Cuenta' }}
+    />
   </Tab.Navigator>
 );
 
 const DriverTabs = () => (
   <Tab.Navigator screenOptions={{ headerShown: false }}>
     <Tab.Screen name="Inicio" component={DriverHomeScreen} />
+    <Tab.Screen
+      name="Cambiar"
+      component={SwitchAccountScreen}
+      options={{ tabBarLabel: '🔄 Cuenta' }}
+    />
   </Tab.Navigator>
 );
 
