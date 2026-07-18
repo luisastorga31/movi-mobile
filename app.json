@@ -1,24 +1,42 @@
 {
   "expo": {
-    "name": "mobile",
-    "slug": "mobile",
+    "name": "Movi",
+    "slug": "movi-app",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": false,
+      "bundleIdentifier": "com.movi.app",
+      "config": {
+        "googleMapsApiKey": "AIzaSyBtACG8Idr9KDfsNkIiz2gFupESdA0xvOM"
+      }
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/android-icon-foreground.png",
-        "backgroundImage": "./assets/android-icon-background.png",
-        "monochromeImage": "./assets/android-icon-monochrome.png"
+        "foregroundImage": "./assets/icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.movi.app",
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyBtACG8Idr9KDfsNkIiz2gFupESdA0xvOM"
+        }
       }
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    }
+    "plugins": [
+      [
+        "expo-location",
+        {
+          "locationAlwaysAndWhenInUsePermission": "Movi necesita tu ubicación para encontrar conductores cercanos."
+        }
+      ]
+    ]
   }
 }

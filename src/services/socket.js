@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const SOCKET_URL = 'http://localhost:3000';
+const SOCKET_URL = 'https://movi-backend-production-870e.up.railway.app';
 
 let socket = null;
 
