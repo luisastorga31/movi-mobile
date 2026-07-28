@@ -12,6 +12,7 @@ import SwitchAccountScreen from '../screens/auth/SwitchAccountScreen';
 import PassengerHomeScreen from '../screens/passenger/HomeScreen';
 import DriverHomeScreen from '../screens/driver/HomeScreen';
 import TripsHistoryScreen from '../screens/TripsHistoryScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -36,6 +37,11 @@ const PassengerTabs = () => (
       options={{ tabBarLabel: '🧾 Historial' }}
     />
     <Tab.Screen
+      name="Perfil"
+      component={ProfileScreen}
+      options={{ tabBarLabel: '👤 Perfil' }}
+    />
+    <Tab.Screen
       name="Cambiar"
       component={SwitchAccountScreen}
       options={{ tabBarLabel: '🔄 Cuenta' }}
@@ -54,6 +60,11 @@ const DriverTabs = () => (
       name="Historial"
       component={TripsHistoryScreen}
       options={{ tabBarLabel: '🧾 Historial' }}
+    />
+    <Tab.Screen
+      name="Perfil"
+      component={ProfileScreen}
+      options={{ tabBarLabel: '👤 Perfil' }}
     />
     <Tab.Screen
       name="Cambiar"
