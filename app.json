@@ -36,7 +36,8 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Movi necesita tu ubicación para encontrar conductores cercanos."
         }
-      ]
+      ],
+      "@stripe/stripe-react-native"
     ]
   }
 }
