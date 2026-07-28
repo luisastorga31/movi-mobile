@@ -8,6 +8,7 @@ import * as Location from 'expo-location';
 import { useAuth } from '../../context/AuthContext';
 import { tripService } from '../../services/api';
 import { getSocket } from '../../services/socket';
+import { sendLocalNotification } from '../../services/notifications';
 
 const { height } = Dimensions.get('window');
 
@@ -35,15 +36,23 @@ export default function PassengerHomeScreen() {
     setLocation(loc.coords);
   };
 
-  const listenForUpdates = () => {
+const listenForUpdates = () => {
     const socket = getSocket();
     if (socket) {
       socket.on('trip:accepted', (trip) => {
         setActiveTrip(trip);
-        Alert.alert('¡Conductor encontrado!', 'Un conductor aceptó tu viaje');
+        sendLocalNotification('¡Conductor encontrado!', 'Un conductor aceptó tu viaje 🚗');
       });
       socket.on('trip:status:updated', (trip) => {
         setActiveTrip(trip);
+        const messages = {
+          driver_arriving: 'Tu conductor está en camino 📍',
+          in_progress: 'Tu viaje ha comenzado 🛣',
+          completed: 'Llegaste a tu destino 🏁',
+        };
+        if (messages[trip.status]) {
+          sendLocalNotification('Movi', messages[trip.status]);
+        }
       });
     }
   };

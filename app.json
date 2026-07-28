@@ -13,7 +13,7 @@
     },
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "com.movi.app",
+      "bundleIdentifier": "com.luisastorga.moviapp",
       "config": {
         "googleMapsApiKey": "AIzaSyBtACG8Idr9KDfsNkIiz2gFupESdA0xvOM"
       }
@@ -23,7 +23,7 @@
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.movi.app",
+      "package": "com.luisastorga.moviapp",
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyBtACG8Idr9KDfsNkIiz2gFupESdA0xvOM"

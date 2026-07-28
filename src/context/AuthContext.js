@@ -2,6 +2,7 @@ import React, { createContext, useState, useContext, useEffect } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { authService } from '../services/api';
 import { connectSocket, disconnectSocket } from '../services/socket';
+import { registerForPushNotifications } from '../services/notifications';
 
 const AuthContext = createContext();
 
@@ -38,6 +39,7 @@ export const AuthProvider = ({ children }) => {
     setUser(user);
     setToken(token);
     await connectSocket();
+    await registerForPushNotifications();
     return user;
   };
 
@@ -49,6 +51,7 @@ export const AuthProvider = ({ children }) => {
     setUser(user);
     setToken(token);
     await connectSocket();
+    await registerForPushNotifications();
     return user;
   };
 
