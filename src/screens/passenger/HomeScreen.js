@@ -1,3 +1,4 @@
+import { geocodeAddress } from '../../services/api';
 import React, { useState, useEffect } from 'react';
 import {
     View, Text, TextInput, TouchableOpacity,
@@ -58,36 +59,41 @@ export default function PassengerHomeScreen({ navigation }) {
     };
 
     const requestTrip = async () => {
-        if (!destination) {
-            Alert.alert('Error', 'Ingresa tu destino');
-            return;
-        }
-        if (!location) {
-            Alert.alert('Error', 'Obteniendo tu ubicación...');
-            return;
-        }
-        try {
-            setLoading(true);
-            const res = await tripService.request({
-                type,
-                origin_address: 'Mi ubicación actual',
-                origin_lat: location.latitude,
-                origin_lng: location.longitude,
-                destination_address: destination,
-                destination_lat: location.latitude + 0.02,
-                destination_lng: location.longitude + 0.02,
-                freight_description: freight_description || null,
-            });
-            setActiveTrip(res.data);
-            const socket = getSocket();
-            if (socket) socket.emit('trip:requested', res.data);
-            Alert.alert('¡Viaje solicitado!', `Precio estimado: $${res.data.price}`);
-        } catch (err) {
-            Alert.alert('Error', err.response?.data?.error || 'Error al solicitar viaje');
-        } finally {
-            setLoading(false);
-        }
-    };
+  if (!destination) {
+    Alert.alert('Error', 'Ingresa tu destino');
+    return;
+  }
+  if (!location) {
+    Alert.alert('Error', 'Obteniendo tu ubicación...');
+    return;
+  }
+  try {
+    setLoading(true);
+    const destCoords = await geocodeAddress(destination);
+    const res = await tripService.request({
+      type,
+      origin_address: 'Mi ubicación actual',
+      origin_lat: location.latitude,
+      origin_lng: location.longitude,
+      destination_address: destCoords.formatted,
+      destination_lat: destCoords.lat,
+      destination_lng: destCoords.lng,
+      freight_description: freight_description || null,
+    });
+    setActiveTrip(res.data);
+    const socket = getSocket();
+    if (socket) socket.emit('trip:requested', res.data);
+    Alert.alert('¡Viaje solicitado!', `Precio estimado: $${res.data.price}`);
+  } catch (err) {
+    if (err.message === 'Dirección no encontrada') {
+      Alert.alert('Error', 'No encontramos esa dirección, intenta ser más específico');
+    } else {
+      Alert.alert('Error', err.response?.data?.error || 'Error al solicitar viaje');
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
     const statusLabel = {
         requested: '🔍 Buscando conductor...',
@@ -98,15 +104,15 @@ export default function PassengerHomeScreen({ navigation }) {
     };
 
     const refreshTrip = async () => {
-  if (!activeTrip) return;
-  try {
-    const res = await tripService.myTrips();
-    const updated = res.data.find(t => t.id === activeTrip.id);
-    if (updated) setActiveTrip(updated);
-  } catch (err) {
-    console.error(err);
-  }
-};
+        if (!activeTrip) return;
+        try {
+            const res = await tripService.myTrips();
+            const updated = res.data.find(t => t.id === activeTrip.id);
+            if (updated) setActiveTrip(updated);
+        } catch (err) {
+            console.error(err);
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -159,16 +165,16 @@ export default function PassengerHomeScreen({ navigation }) {
                         <Text style={styles.price}>${activeTrip.price}</Text>
                         <Text style={styles.address}>🏁 {activeTrip.destination_address}</Text>
                         <TouchableOpacity onPress={refreshTrip}>
-  <Text style={{textAlign:'center', color:'#666', marginTop:8}}>🔄 Actualizar estado</Text>
-</TouchableOpacity>
+                            <Text style={{ textAlign: 'center', color: '#666', marginTop: 8 }}>🔄 Actualizar estado</Text>
+                        </TouchableOpacity>
                         {activeTrip.status === 'completed' && (
                             <View>
                                 <TouchableOpacity
                                     style={styles.button}
-                                    onPress={() => navigation.navigate('Payment', { 
-  trip: activeTrip,
-  onPaymentComplete: () => setActiveTrip(null)
-})}
+                                    onPress={() => navigation.navigate('Payment', {
+                                        trip: activeTrip,
+                                        onPaymentComplete: () => setActiveTrip(null)
+                                    })}
                                 >
                                     <Text style={styles.buttonText}>💳 Pagar ${activeTrip.price}</Text>
                                 </TouchableOpacity>

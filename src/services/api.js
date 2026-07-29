@@ -36,5 +36,15 @@ export const driverService = {
   getProfile: () => api.get('/drivers/profile'),
   getAvailable: () => api.get('/drivers/available'),
 };
-
+export const geocodeAddress = async (address) => {
+  const key = 'AIzaSyBtACG8Idr9KDfsNkIiz2gFupESdA0xvOM';
+  const url = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(address)}&key=${key}&region=mx`;
+  const res = await fetch(url);
+  const data = await res.json();
+  if (data.results && data.results.length > 0) {
+    const { lat, lng } = data.results[0].geometry.location;
+    return { lat, lng, formatted: data.results[0].formatted_address };
+  }
+  throw new Error('Dirección no encontrada');
+};
 export default api;
