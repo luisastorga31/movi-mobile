@@ -14,6 +14,7 @@ import DriverHomeScreen from '../screens/driver/HomeScreen';
 import TripsHistoryScreen from '../screens/TripsHistoryScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import PaymentScreen from '../screens/PaymentScreen';
+import RegisterVehicleScreen from '../screens/driver/RegisterVehicleScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -57,29 +58,36 @@ const PassengerTabsOnly = () => (
     </Tab.Navigator>
 );
 
-const DriverTabs = () => (
-    <Tab.Navigator screenOptions={{ headerShown: false }}>
-        <Tab.Screen
-            name="Inicio"
-            component={DriverHomeScreen}
-            options={{ tabBarLabel: '🏠 Inicio' }}
-        />
-        <Tab.Screen
-            name="Historial"
-            component={TripsHistoryScreen}
-            options={{ tabBarLabel: '🧾 Historial' }}
-        />
-        <Tab.Screen
-            name="Perfil"
-            component={ProfileScreen}
-            options={{ tabBarLabel: '👤 Perfil' }}
-        />
-        <Tab.Screen
-            name="Cambiar"
-            component={SwitchAccountScreen}
-            options={{ tabBarLabel: '🔄 Cuenta' }}
-        />
-    </Tab.Navigator>
+const DriverStack = () => (
+  <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Screen name="DriverTabs" component={DriverTabsOnly} />
+    <Stack.Screen name="RegisterVehicle" component={RegisterVehicleScreen} />
+  </Stack.Navigator>
+);
+
+const DriverTabsOnly = () => (
+  <Tab.Navigator screenOptions={{ headerShown: false }}>
+    <Tab.Screen
+      name="Inicio"
+      component={DriverHomeScreen}
+      options={{ tabBarLabel: '🏠 Inicio' }}
+    />
+    <Tab.Screen
+      name="Historial"
+      component={TripsHistoryScreen}
+      options={{ tabBarLabel: '🧾 Historial' }}
+    />
+    <Tab.Screen
+      name="Perfil"
+      component={ProfileScreen}
+      options={{ tabBarLabel: '👤 Perfil' }}
+    />
+    <Tab.Screen
+      name="Cambiar"
+      component={SwitchAccountScreen}
+      options={{ tabBarLabel: '🔄 Cuenta' }}
+    />
+  </Tab.Navigator>
 );
 
 export default function AppNavigator() {
@@ -98,7 +106,7 @@ export default function AppNavigator() {
             {!user ? (
                 <AuthStack />
             ) : user.role === 'driver' ? (
-                <DriverTabs />
+                <DriverStack />
             ) : (
                 <PassengerStack />
             )}
